@@ -179,8 +179,7 @@ public class GUI {
 		}
 
 		public void windowOpened(WindowEvent e) {
-			String x = "" + (db.filmset.size());
-			labelCount.setText("Фильмов в списке - " + x);
+			labelCount.setText("Фильмов в списке - " + db.cf);
 		}
 
 		public void windowClosed(WindowEvent e) {}
