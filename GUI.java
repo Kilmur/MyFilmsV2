@@ -16,6 +16,8 @@ public class GUI {
 	JTextField prodTF;
 	JTextField searchTF;
 	JLabel labelCount;
+	DefaultListModel<Film> dlm;
+	JList list;
 	
 	DB db;
 	
@@ -33,6 +35,9 @@ public class GUI {
 		Color bg = new Color(0, 189, 152);
 		panel.setBackground(bg);
 		panel.setLayout(null);
+		
+		dlm = new DefaultListModel<Film>();
+		list = new JList(dlm);
 		
 		area = new JTextArea(10, 28);
 		JScrollPane scr = new JScrollPane(area);
@@ -61,8 +66,11 @@ public class GUI {
 		
 		frame.add(panel);
 		
+		panel.add(list);
+		list.setBounds(10, 10, 480, 80);
+		
 		panel.add(scr);
-		scr.setBounds(10, 10, 480, 150);
+		scr.setBounds(10, 100, 480, 68);
 		
 		panel.add(labelName);
 		labelName.setBounds(10, 178, 100, 25);
@@ -122,8 +130,11 @@ public class GUI {
 			int y;
 			try{
 				y = Integer.parseInt(year);
-			}catch(Exception ex){
-				y = 0;
+			}catch(NumberFormatException ex){
+				ex.printStackTrace();
+				area.setText("Введите корректный год, состоящий из цифр");
+				yearTF.requestFocus();
+				return;
 			}
 			Film film = new Film(name, y, country, prod);
 			boolean result;
@@ -151,12 +162,13 @@ public class GUI {
 	class ButSearch implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
 		    area.setText("");
+		    dlm.removeAllElements();
 		    ArrayList<Film> films;
 			try{
 				int x = Integer.parseInt(searchTF.getText());
 				films = db.searchYear(x);
 				for(Film f: films){
-				    area.append(f.toString() + "\n");
+				    dlm.addElement(f);
 				}
 			}catch(NumberFormatException ex){
 				ex.printStackTrace();
@@ -165,9 +177,12 @@ public class GUI {
 			    
                 films = db.search(search);
                 for(Film f: films){
-                    area.append(f.toString() + "\n");
+                    dlm.addElement(f);
                 }
                 searchTF.setText("");
+			}
+			if(dlm.isEmpty()){
+			    area.setText("Фильм не найден");
 			}
 		}
 	}
