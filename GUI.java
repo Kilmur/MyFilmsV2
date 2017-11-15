@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -21,11 +22,6 @@ public class GUI {
 	public void createGUI(){
 		
 		db = new DB();
-		try{
-			db.run();
-		}catch(Exception e){
-			e.printStackTrace();
-		}
 		
 		frame = new JFrame();
 		frame.setSize(500, 500);
@@ -154,19 +150,24 @@ public class GUI {
 	//           КНОПКА ПОИСКА
 	class ButSearch implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
+		    area.setText("");
+		    ArrayList<Film> films;
 			try{
 				int x = Integer.parseInt(searchTF.getText());
-				String film = db.searchYear(x);
-				area.setText(film);
-				String films = searchTF.getText();
-				String res = db.search(films);
-				area.append(res);
-				searchTF.setText("");
-			}catch(Exception ex){
-				String search = searchTF.getText();
-				String films = db.search(search);
-				area.setText(films);
-				searchTF.setText("");
+				films = db.searchYear(x);
+				for(Film f: films){
+				    area.append(f.toString() + "\n");
+				}
+			}catch(NumberFormatException ex){
+				ex.printStackTrace();
+			}finally{
+			    String search = searchTF.getText();
+			    
+                films = db.search(search);
+                for(Film f: films){
+                    area.append(f.toString() + "\n");
+                }
+                searchTF.setText("");
 			}
 		}
 	}
@@ -174,7 +175,7 @@ public class GUI {
 	//    ВЫЗОВ СЕРИАЛИЗАЦИИ ПРИ ЗАКРЫТИИ ФРЕЙМА
 	class WindowClosing implements WindowListener{
         public void windowClosing(WindowEvent e) {
-			db.serializable();
+			db.serialize();
         	System.exit(0);
 		}
 

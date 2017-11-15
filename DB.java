@@ -1,47 +1,50 @@
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class DB {
 	HashSet<Film> filmset = new HashSet<Film>();
 	int cf;
 	
-	public void run(){
+	public DB(){
 		File file = new File("database.ser");
 		try{
 			if (file.exists()){
-				deserializable();
-				cf = filmset.size();
+				deserialize();
+				cf = filmset.size();        
 			}else{
 				file.createNewFile();
 			}
-		}catch(Exception e){
+		}catch(IOException e){
 			e.printStackTrace();
+		}catch(ClassNotFoundException e){
+            e.printStackTrace();
 		}
 	}
 	
 	//   МЕТОД ПОСИКА ПО String ПОЛЯМ
-	public String search(String value){
-		String sFilm = ("");
+    public ArrayList<Film> search(String value){
+		ArrayList<Film> films= new ArrayList<Film>();
 		for(Film f: filmset){
 			String x = f.name;
 			String y = f.country;
 			String z = f.prod;
 			if(x.contains(value) || y.contains(value) || z.contains(value)){
-				sFilm = sFilm + f.toString() + "\n";
+				films.add(f);
 			}
 		}
-		return sFilm;
+		return films;
 	}
 	//   МЕТОД ПОИСКА ПО ИНТ ПОЛЮ
-	public String searchYear(int value){
-		String sFilms = "";
+    public ArrayList<Film> searchYear(int value){
+	    ArrayList<Film> films = new ArrayList<Film>();
 		for(Film f: filmset){
 			int x = f.year;
 			if(value == x){
-				sFilms = sFilms + f.toString() + "\n";
+				films.add(f);
 			}
 		}
-		return sFilms;
+		return films;
 	}
 	//   МЕТОД ДОБАЛЕНИЯ ФИЛЬМА
 	public boolean addFilm(Film film){
@@ -53,7 +56,7 @@ public class DB {
 		}
 	}
 	
-	public void deserializable() throws IOException, ClassNotFoundException{
+	public void deserialize() throws IOException, ClassNotFoundException{
 			
 		    FileInputStream fis = new FileInputStream("database.ser");
 			ObjectInputStream ois = new ObjectInputStream(fis);
@@ -66,7 +69,7 @@ public class DB {
 			ois.close();
 	}
 	
-	public void serializable(){
+	public void serialize(){
 		try {
 			FileOutputStream fos = new FileOutputStream("database.ser");
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -78,6 +81,5 @@ public class DB {
 			e.printStackTrace();
 		}
 	}
-	
 	
 }
