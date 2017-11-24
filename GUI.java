@@ -4,6 +4,8 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 
 public class GUI {
@@ -18,7 +20,7 @@ public class GUI {
 	JLabel labelCount;
 	DefaultListModel<Film> dlm;
 	JList list;
-	
+	Film listValue;
 	DB db;
 	
 	public void createGUI(){
@@ -64,6 +66,8 @@ public class GUI {
 		JButton butAdd = new JButton("Добавить");
 		JButton butSearch = new JButton("Поиск");
 		
+		JButton but = new JButton("Редакт");
+		
 		frame.add(panel);
 		
 		panel.add(list);
@@ -108,6 +112,9 @@ public class GUI {
 		panel.add(butSearch);
 		butSearch.setBounds(190, 419, 120, 25);
 		
+		panel.add(but);
+		but.setBounds(10, 450, 40, 40);
+		
 		panel.add(labelCount);
 		Font fontLabelCount = new Font("arial", Font.ITALIC, 12);
 		labelCount.setFont(fontLabelCount);
@@ -115,7 +122,9 @@ public class GUI {
 		
 		butAdd.addActionListener(new ButAdd());
 		butSearch.addActionListener(new ButSearch());
+		but.addActionListener(new But());
 		frame.addWindowListener(new WindowClosing());
+		list.addListSelectionListener(new ListListener());
 		
 		frame.setVisible(true);
 	}
@@ -185,6 +194,31 @@ public class GUI {
 			    area.setText("Фильм не найден");
 			}
 		}
+	}
+	
+	//             ПРОБНАЯ КНОПКА
+	class But implements ActionListener{
+        public void actionPerformed(ActionEvent e) {
+            
+            new EditFrame().createEditFrame();
+            
+            
+        }
+	    
+	}
+	// ЗАНОСИМ В ПЕРЕМЕННУЮ РЕЗУЛЬТАТ ВЫДЕЛЕНИЯ НА JList
+	class ListListener implements ListSelectionListener{
+        public void valueChanged(ListSelectionEvent e) {
+            if(!e.getValueIsAdjusting()){
+                Object v;
+                v = list.getSelectedValue();
+                listValue = (Film) v;
+                
+                System.out.println(listValue);
+            }
+            
+        }
+	    
 	}
 	
 	//    ВЫЗОВ СЕРИАЛИЗАЦИИ ПРИ ЗАКРЫТИИ ФРЕЙМА
