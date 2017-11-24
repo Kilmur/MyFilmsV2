@@ -21,7 +21,7 @@ public class GUI {
 	DefaultListModel<Film> dlm;
 	JList list;
 	Film listValue;
-	DB db;
+	static DB db;
 	
 	public void createGUI(){
 		
@@ -199,8 +199,24 @@ public class GUI {
 	//             ПРОБНАЯ КНОПКА
 	class But implements ActionListener{
         public void actionPerformed(ActionEvent e) {
+            String n = listValue.name;
+            int y = listValue.year;
+            String c = listValue.country;
+            String p = listValue.prod;
             
-            new EditFrame().createEditFrame();
+            if(listValue != null){
+                EditFrame ef = new EditFrame(n, y, c, p);
+                ef.createEditFrame();
+                ef.tf1.setText(n);
+                ef.tf2.setText("" + y);
+                ef.tf3.setText(c);
+                ef.tf4.setText(p);
+                
+                
+                
+            }else{
+                area.setText("Выберите фильм из списка");
+            }
             
             
         }
