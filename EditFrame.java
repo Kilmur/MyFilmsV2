@@ -72,8 +72,10 @@ public class EditFrame {
                 tf2.requestFocus();
                 return;
             }
-            if(!name.equals(lastName) || (!year.equals(lastYear)) || 
+            if(!name.equals(lastName) || (yearInt != lastYear) || 
               (!country.equals(lastCountry)) || (!prod.equals(lastProd))){
+                System.out.println("Цикл if пошел");
+                
                 
                 for(Film f: GUI.db.filmset){
                     String n = f.name;
@@ -82,21 +84,19 @@ public class EditFrame {
                         GUI.db.filmset.remove(f);
                     }
                 }
+                System.out.println("Цикл for закончен");
                 Film newFilm = new Film(name, yearInt, country, prod);
                 GUI.db.filmset.add(newFilm);
+                System.out.println("Создание фильма закончено");
             }
-            
-            
-            
+            eframe.dispose();
             
         }
     }
 //           КНОПКА ОТМЕНЫ
     class But2 implements ActionListener{
         public void actionPerformed(ActionEvent e) {
-            
-            
-            
+            eframe.dispose();
         }
     }
     

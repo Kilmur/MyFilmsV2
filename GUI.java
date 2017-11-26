@@ -38,8 +38,10 @@ public class GUI {
 		panel.setBackground(bg);
 		panel.setLayout(null);
 		
+		
 		dlm = new DefaultListModel<Film>();
 		list = new JList(dlm);
+		
 		
 		area = new JTextArea(10, 28);
 		JScrollPane scr = new JScrollPane(area);
