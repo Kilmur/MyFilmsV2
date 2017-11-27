@@ -72,23 +72,26 @@ public class EditFrame {
                 tf2.requestFocus();
                 return;
             }
+            
             if(!name.equals(lastName) || (yearInt != lastYear) || 
               (!country.equals(lastCountry)) || (!prod.equals(lastProd))){
                 System.out.println("Цикл if пошел");
-                
                 
                 for(Film f: GUI.db.filmset){
                     String n = f.name;
                     int y = f.year;
                     if((n.contains(lastName)) & (lastYear == y)){
                         GUI.db.filmset.remove(f);
+                        break;
                     }
                 }
+                
                 System.out.println("Цикл for закончен");
                 Film newFilm = new Film(name, yearInt, country, prod);
                 GUI.db.filmset.add(newFilm);
                 System.out.println("Создание фильма закончено");
             }
+            
             eframe.dispose();
             
         }

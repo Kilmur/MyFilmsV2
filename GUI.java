@@ -31,7 +31,7 @@ public class GUI {
 		frame.setSize(500, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("Сборник просмотренных фильмов");
-		frame.setResizable(false);
+//		frame.setResizable(false);
 		
 		panel = new JPanel();
 		Color bg = new Color(0, 189, 152);
@@ -41,7 +41,7 @@ public class GUI {
 		
 		dlm = new DefaultListModel<Film>();
 		list = new JList(dlm);
-		
+//		JScrollPane s = new JScrollPane(list);
 		
 		area = new JTextArea(10, 28);
 		JScrollPane scr = new JScrollPane(area);
@@ -73,10 +73,10 @@ public class GUI {
 		frame.add(panel);
 		
 		panel.add(list);
-		list.setBounds(10, 10, 480, 80);
+		list.setBounds(10, 10, 480, 85);
 		
 		panel.add(scr);
-		scr.setBounds(10, 100, 480, 68);
+		scr.setBounds(10, 105, 480, 68);
 		
 		panel.add(labelName);
 		labelName.setBounds(10, 178, 100, 25);
