@@ -41,7 +41,9 @@ public class GUI {
 		
 		dlm = new DefaultListModel<Film>();
 		list = new JList(dlm);
-//		JScrollPane s = new JScrollPane(list);
+		JScrollPane s = new JScrollPane(list);
+		
+		
 		
 		area = new JTextArea(10, 28);
 		JScrollPane scr = new JScrollPane(area);
@@ -74,6 +76,12 @@ public class GUI {
 		
 		panel.add(list);
 		list.setBounds(10, 10, 480, 85);
+		
+		panel.add(s);
+        s.setBounds(490, 10, 40, 85);
+		
+		panel.add(s);
+		s.setBounds(10, 10, 480, 85);
 		
 		panel.add(scr);
 		scr.setBounds(10, 105, 480, 68);
