@@ -2,6 +2,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -38,20 +40,17 @@ public class GUI {
 		panel.setBackground(bg);
 		panel.setLayout(null);
 		
-		
 		dlm = new DefaultListModel<Film>();
 		list = new JList(dlm);
-		JScrollPane s = new JScrollPane(list);
-		
-		
+		JScrollPane scrList = new JScrollPane(list);
 		
 		area = new JTextArea(10, 28);
 		JScrollPane scr = new JScrollPane(area);
 		area.setLineWrap(true);
-		scr.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scr.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scr.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		area.setText("Информация для пользователя");
-		Font fontArea = new Font("arial", Font.BOLD, 16);
+		Font fontArea = new Font("arial", Font.BOLD, 13);
 		area.setFont(fontArea);
 		
 		JLabel labelName = new JLabel("Название");
@@ -74,14 +73,8 @@ public class GUI {
 		
 		frame.add(panel);
 		
-		panel.add(list);
-		list.setBounds(10, 10, 480, 85);
-		
-		panel.add(s);
-        s.setBounds(490, 10, 40, 85);
-		
-		panel.add(s);
-		s.setBounds(10, 10, 480, 85);
+		panel.add(scrList);
+        scrList.setBounds(10, 10, 480, 85);
 		
 		panel.add(scr);
 		scr.setBounds(10, 105, 480, 68);
@@ -147,7 +140,16 @@ public class GUI {
 			String country = countryTF.getText();
 			String prod = prodTF.getText();
 			int y;
+			String pt = "([\\w]+[\\s]?)*([\\-][\\s])?([\\w]+[\\s]?)*";
+			Pattern pattern = Pattern.compile(pt, Pattern.UNICODE_CHARACTER_CLASS);
 			try{
+			    Matcher m = pattern.matcher(nameTF.getText());
+			    boolean ft = m.matches();
+			    if(!ft){
+			        area.setText("Введите корректное название");
+			        nameTF.requestFocus();
+			        return;
+			    }
 				y = Integer.parseInt(year);
 			}catch(NumberFormatException ex){
 				ex.printStackTrace();
@@ -184,6 +186,9 @@ public class GUI {
 		    dlm.removeAllElements();
 		    ArrayList<Film> films;
 			try{
+			    if(searchTF.getText().equals("")){
+			        area.setText("Введен пустой поисковый запрос\nВыведены все фильмы в списке");
+			    }
 				int x = Integer.parseInt(searchTF.getText());
 				films = db.searchYear(x);
 				for(Film f: films){
@@ -209,29 +214,26 @@ public class GUI {
 	//             ПРОБНАЯ КНОПКА
 	class But implements ActionListener{
         public void actionPerformed(ActionEvent e) {
-            String n = listValue.name;
-            int y = listValue.year;
-            String c = listValue.country;
-            String p = listValue.prod;
             
             if(listValue != null){
+                
+                String n = listValue.name;
+                int y = listValue.year;
+                String c = listValue.country;
+                String p = listValue.prod;
+                
                 EditFrame ef = new EditFrame(n, y, c, p);
                 ef.createEditFrame();
                 ef.tf1.setText(n);
                 ef.tf2.setText("" + y);
                 ef.tf3.setText(c);
                 ef.tf4.setText(p);
-                
-                
-                
             }else{
-                area.setText("Выберите фильм из списка");
+                area.setText("Для редактирования записей:\n1. Найдите фильм с помощью Поиска\n2. Выделите его\n3. Жмите кнопку Редактирование");
             }
-            
-            
         }
-	    
 	}
+	
 	// ЗАНОСИМ В ПЕРЕМЕННУЮ РЕЗУЛЬТАТ ВЫДЕЛЕНИЯ НА JList
 	class ListListener implements ListSelectionListener{
         public void valueChanged(ListSelectionEvent e) {
@@ -242,9 +244,7 @@ public class GUI {
                 
                 System.out.println(listValue);
             }
-            
         }
-	    
 	}
 	
 	//    ВЫЗОВ СЕРИАЛИЗАЦИИ ПРИ ЗАКРЫТИИ ФРЕЙМА

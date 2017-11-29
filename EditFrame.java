@@ -27,7 +27,8 @@ public class EditFrame {
     public void createEditFrame(){
         
         eframe = new JFrame();
-        eframe.setSize(300, 200);
+        eframe.setSize(280, 160);
+        eframe.setTitle("Редактирование");
         
         JPanel panel = new JPanel();
         panel.setBackground(Color.LIGHT_GRAY);
@@ -54,8 +55,8 @@ public class EditFrame {
         but2.addActionListener(new But2());
         
         eframe.setVisible(true);
-        
     }
+    
   //         КНОПКА РЕДАКТИРОВАНИЯ
     class But1 implements ActionListener{
         public void actionPerformed(ActionEvent e) {
@@ -72,10 +73,8 @@ public class EditFrame {
                 tf2.requestFocus();
                 return;
             }
-            
             if(!name.equals(lastName) || (yearInt != lastYear) || 
               (!country.equals(lastCountry)) || (!prod.equals(lastProd))){
-                System.out.println("Цикл if пошел");
                 
                 for(Film f: GUI.db.filmset){
                     String n = f.name;
@@ -85,15 +84,10 @@ public class EditFrame {
                         break;
                     }
                 }
-                
-                System.out.println("Цикл for закончен");
                 Film newFilm = new Film(name, yearInt, country, prod);
                 GUI.db.filmset.add(newFilm);
-                System.out.println("Создание фильма закончено");
             }
-            
             eframe.dispose();
-            
         }
     }
 //           КНОПКА ОТМЕНЫ
